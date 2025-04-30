@@ -1,0 +1,29 @@
+// E-Commerce Dashboard DAX Measures
+// Project: Power BI E-Commerce Sales Dashboard
+// Created: April 2025
+
+// Date Table for Time Intelligence
+DateTable = 
+VAR MinYear = YEAR(MIN('Ecommerce_Dataset'[OrderDate]))
+VAR MaxYear = YEAR(MAX('Ecommerce_Dataset'[OrderDate]))
+RETURN
+ADDCOLUMNS(
+    CALENDAR(
+        DATE(MinYear, 1, 1),
+        DATE(MaxYear, 12, 31)
+    ),
+    "Year", YEAR([Date]),
+    "Month", FORMAT([Date], "mmmm"),
+    "MonthNum", MONTH([Date]),
+    "Quarter", "Q" & FORMAT([Date], "Q")
+)
+
+// Measures for KPIs
+Total Revenue = 
+SUM('Ecommerce_Dataset'[Total Sales])
+
+Average Order Value = 
+DIVIDE([Total Revenue], COUNT('Ecommerce_Dataset'[OrderID]), 0)
+
+Total Orders = 
+COUNT('Ecommerce_Dataset'[OrderID])
